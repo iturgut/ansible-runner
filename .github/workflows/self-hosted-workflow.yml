@@ -1,0 +1,38 @@
+name: Self-Hosted Runner Workflow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  test-runner:
+    runs-on: self-hosted  # This specifies to use our self-hosted runner
+    
+    steps:
+    - uses: actions/checkout@v3
+      
+    - name: Display environment information
+      run: |
+        echo "Running on self-hosted runner"
+        echo "Hostname: $(hostname)"
+        echo "OS: $(uname -a)"
+        echo "IP Address: $(curl -s ifconfig.me)"
+        echo "Current directory: $(pwd)"
+        echo "Directory contents: $(ls -la)"
+        
+    - name: Run a simple test
+      run: |
+        echo "Hello from self-hosted runner!"
+        echo "This workflow is running on the EC2 instance provisioned by Ansible"
+        
+    - name: Check system resources
+      run: |
+        echo "CPU Info:"
+        lscpu
+        echo "Memory Info:"
+        free -h
+        echo "Disk Info:"
+        df -h
